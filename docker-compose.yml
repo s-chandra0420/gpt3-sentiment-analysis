@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: gpt3_sentiment_analysis
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_postgres_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      DB_HOST: db
+      DB_NAME: gpt3_sentiment_analysis
+      DB_USER: postgres
+      DB_PASS: your_postgres_password
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"  # Optional: Map to a specific port if your app serves HTTP requests
+
+volumes:
+  postgres_data:

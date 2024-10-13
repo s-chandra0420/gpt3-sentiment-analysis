@@ -3,12 +3,33 @@ import matplotlib.pyplot as plt
 from textblob import TextBlob
 import os
 from dotenv import load_dotenv
+import psycopg2
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Set up your OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Database connection parameters
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
+
+# Function to connect to the PostgreSQL database
+def connect_db():
+    try:
+        conn = psycopg2.connect(
+            host=DB_HOST,
+            database=DB_NAME,
+            user=DB_USER,
+            password=DB_PASS
+        )
+        return conn
+    except Exception as e:
+        print(f"Error connecting to the database: {str(e)}")
+        return None
 
 # Function to interact with OpenAI GPT-3 model
 def gpt3_response(prompt):
@@ -34,6 +55,22 @@ def analyze_sentiment(text):
         return 'Negative'
     else:
         return 'Neutral'
+
+# Function to save conversation to the database
+def save_to_db(user_input, gpt_response, sentiment):
+    conn = connect_db()
+    if conn:
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "INSERT INTO conversations (user_input, gpt_response, sentiment) VALUES (%s, %s, %s)",
+                    (user_input, gpt_response, sentiment)
+                )
+                conn.commit()
+        except Exception as e:
+            print(f"Error saving to database: {str(e)}")
+        finally:
+            conn.close()
 
 # Function to generate sentiment report and pie chart visualization
 def generate_report(sentiments):
@@ -79,7 +116,10 @@ def main():
         sentiment = analyze_sentiment(response)
         sentiments.append(sentiment)
         print(f"Sentiment: {sentiment}\n")
-    
+
+        # Save conversation to the database
+        save_to_db(user_input, response, sentiment)
+
     # Generate sentiment report and visualizations
     generate_report(sentiments)
 

@@ -3,3 +3,4 @@ python-dotenv
 textblob
 matplotlib
 nltk
+psycopg2-binary
