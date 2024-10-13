@@ -77,8 +77,8 @@ Hugging Face for their contributions to NLP.
 The community for their continuous support and feedback.
 
 ## Contact Details
-NAME - SHATAKSHI CHANDRA
+Name - Shatakshi Chandra
 
-PHONE NUMBER - (+91)9149177279
+Ph. number - (+91)9149177279
 
-EMAIL - shatakshi0420@gmail.com
+mail - shatakshi0420@gmail.com
