@@ -75,10 +75,3 @@ OpenAI for providing the GPT-3 model.
 Hugging Face for their contributions to NLP.
 
 The community for their continuous support and feedback.
-
-## Contact Details
-Name - Shatakshi Chandra
-
-Ph. number - (+91)9149177279
-
-mail - shatakshi0420@gmail.com
